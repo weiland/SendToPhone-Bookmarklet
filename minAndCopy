@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var UglifyJS = require("uglify-js");
+
+var inputFile = process.argv[2];
+var noPrefix  = (process.argv.length >= 4 && process.argv[3] === 'np')
+
+if(typeof inputFile === 'undefined') process.kill(); // byebye o/
+
+fs.exists(inputFile, function(ex) {
+  var result  = UglifyJS.minify(inputFile, "utf8"),
+      prefix  = noPrefix ? '' : 'javascript:';
+      code    = prefix + result.code,
+      spawn   = require('child_process').spawn,
+      echo    = spawn('echo', [code]),
+      pbcopy  = spawn('pbcopy');
+
+  echo.stdout.on('data', function (data) {
+    pbcopy.stdin.write(data);
+  });
+  echo.on('close', function (code) {
+    pbcopy.stdin.end();
+  });
+
+  console.log('successfully copied!!1');
+});
