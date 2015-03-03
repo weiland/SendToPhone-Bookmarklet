@@ -1,6 +1,7 @@
 (function(){
-  var currentURL, __constructor, config, buildQuery, post;
+  var currentURL, title, __constructor, config, buildQuery, post;
   currentURL = window.location.href;
+  title = document.title,
   config = {
     AppTitle        : 'Send URL to Phone',
     PushoverAppKey  : 'APPKEY',
@@ -19,7 +20,7 @@
   buildQuery = function() {
     var query =   'token='  + config.PushoverAppKey
                 + '&user='  + config.PushoverUserKey
-                + '&title=' + config.AppTitle
+                + '&title=' + title
                 + '&message=' + currentURL
                 + '&url='   + currentURL
                 ;
